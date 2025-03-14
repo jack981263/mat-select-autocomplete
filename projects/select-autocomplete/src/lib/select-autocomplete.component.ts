@@ -8,6 +8,7 @@ import {
   DoCheck
 } from "@angular/core";
 import { FormControl } from "@angular/forms";
+import {MatSelect} from '@angular/material/select/typings/select';
 
 @Component({
   selector: "mat-select-autocomplete",
@@ -104,15 +105,17 @@ export class SelectAutocompleteComponent implements OnChanges, DoCheck {
   @Input() showErrorMsg = false;
   @Input() selectedOptions;
   @Input() multiple = true;
+  @Input() async = false;
 
   // New Options
   @Input() labelCount: number = 1;
   @Input() appearance: "standard" | "fill" | "outline" = "standard";
 
-  @Output()
-  selectionChange: EventEmitter<any> = new EventEmitter();
+  @Output() selectionChange: EventEmitter<any> = new EventEmitter();
+  @Output() input: EventEmitter<any> = new EventEmitter();
 
-  @ViewChild("selectElem") selectElem;
+  @ViewChild("selectElem") selectElem: MatSelect;
+  @ViewChild("searchInput") searchInput: HTMLInputElement;
 
   filteredOptions: Array<any> = [];
   selectedValue: Array<any> = [];
@@ -173,6 +176,7 @@ export class SelectAutocompleteComponent implements OnChanges, DoCheck {
     if (!this.filteredOptions.length) {
       this.selectAllChecked = false;
     }
+    this.input.emit(value);
   }
 
   hideOption(option) {
